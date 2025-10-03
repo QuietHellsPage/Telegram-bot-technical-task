@@ -1,6 +1,6 @@
 # Telegram-bot-technical-task
-1 - [Андрей](https://t.me/hollow_shelves_quiet_hell)  
-2 - [Алина]  
-3 - [Вероника]  
-4 - [Лия]  
-5 - [Лиза]  
+Роль - [Андрей](https://t.me/hollow_shelves_quiet_hell)  
+Роль - [Алина](https://t.me/alinntr)  
+Роль - [Вероника](https://t.me/Ronny_n)  
+Роль - [Лия](https://t.me/li_kuuu)  
+Роль - [Лиза](https://t.me/lizzaawxx)  
