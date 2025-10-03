@@ -26,7 +26,7 @@ async def show_weather(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 if __name__ == "__main__":
-    application = ApplicationBuilder().token("8450155826:AAEqV80Bz3HTAuPmAH6_HKF4Pu9Wk1U44Mk").build()
+    application = ApplicationBuilder().token("PASTE TOKEN").build()
     handler = CommandHandler("start", start)
     weather_handler = MessageHandler(filters.TEXT & (~filters.COMMAND), show_weather)
     application.add_handler(handler=handler)
