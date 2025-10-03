@@ -1,2 +1,6 @@
 # Telegram-bot-technical-task
-разработчик - [Андрей Климов](https://t.me/hollow_shelves_quiet_hell)
+1 - [Андрей](https://t.me/hollow_shelves_quiet_hell)
+2
+3
+4
+5
