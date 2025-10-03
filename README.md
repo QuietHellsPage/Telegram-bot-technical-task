@@ -1,6 +1,7 @@
 # Telegram-bot-technical-task
-Роль - [Андрей](https://t.me/hollow_shelves_quiet_hell)  
-Роль - [Алина](https://t.me/alinntr)  
-Роль - [Вероника](https://t.me/Ronny_n)  
-Роль - [Лия](https://t.me/li_kuuu)  
-Роль - [Лиза](https://t.me/lizzaawxx)  
+
+1. [Андрей](https://t.me/hollow_shelves_quiet_hell) - разработчик
+2. [Алина](https://t.me/alinntr) - менеджер проекта
+3. [Вероника](https://t.me/Ronny_n) - промпт-инженер
+4. [Лия](https://t.me/li_kuuu) - разметчик
+5. [Лиза](https://t.me/lizzaawxx) - роль
