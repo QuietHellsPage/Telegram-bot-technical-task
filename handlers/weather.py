@@ -45,7 +45,7 @@ async def handle_city_input(update: Update, context: ContextTypes.DEFAULT_TYPE):
             ],
             [
                 InlineKeyboardButton("📆 Завтра", callback_data="time_tomorrow"),
-                InlineKeyboardButton("🗓️ 3 дня", callback_data="time_forecast"),
+                InlineKeyboardButton("🗓️ 2 дня", callback_data="time_forecast"),
             ],
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
@@ -88,7 +88,7 @@ async def handle_weather_button(
                 ],
                 [
                     InlineKeyboardButton("📆 Завтра", callback_data="time_tomorrow"),
-                    InlineKeyboardButton("🗓️ 3 дня", callback_data="time_forecast"),
+                    InlineKeyboardButton("🗓️ 2 дня", callback_data="time_forecast"),
                 ],
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
@@ -184,7 +184,7 @@ async def _handle_time_selection(query, context, callback_data, city):
                 ],
                 [
                     InlineKeyboardButton("📆 Завтра", callback_data="time_tomorrow"),
-                    InlineKeyboardButton("🗓️ 3 дня", callback_data="time_forecast"),
+                    InlineKeyboardButton("🗓️ 2 дня", callback_data="time_forecast"),
                 ],
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)

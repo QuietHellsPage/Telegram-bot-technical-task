@@ -89,7 +89,7 @@ class WeatherService:
                 f"Температура: {int(round(weather_data['main']['temp']))}°C\n"
                 f"Ощущается как: {int(round(weather_data['main']['feels_like']))}°C\n"
                 f"Влажность: {weather_data['main']['humidity']}%\n"
-                f"Давление: {weather_data['main']['pressure']} hPa\n"
+                f"Давление: {weather_data['main']['pressure']} Pa\n"
                 f"Ветер: {weather_data['wind']['speed']} м/с\n"
                 f"Облачность: {weather_data['clouds']['all']}%"
             )
@@ -134,7 +134,7 @@ class WeatherService:
             return result
 
         elif info_type == "forecast_all":
-            result = "Прогноз на 3 дня:\n"
+            result = "Прогноз на 2 дня:\n"
             current_date = None
 
             for forecast in forecasts[:10]:
