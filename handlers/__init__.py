@@ -6,5 +6,5 @@ __all__ = [
     "start_handler",
     "weather_input_handler",
     "weather_button_handler",
-    "help_handler"
+    "help_handler",
 ]

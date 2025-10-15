@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 @dataclass
 class BotConfig:
     token: str = os.getenv("BOT_TOKEN")
@@ -17,4 +18,6 @@ class BotConfig:
         if not cls.weather_api_key:
             raise ValueError("WEATHER_API_KEY not found")
         return cls()
+
+
 config = BotConfig.validate()

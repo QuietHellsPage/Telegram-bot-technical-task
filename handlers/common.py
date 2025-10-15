@@ -33,4 +33,5 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         await update.message.reply_text("Произошла ошибка при показе справки")
 
+
 help_handler = CommandHandler("help", help_command)

@@ -7,11 +7,13 @@ from config.settings import config
 
 class WeatherService:
     BASE_URL = "https://api.openweathermap.org/data/2.5"
-    
+
     @classmethod
     def _make_api_request(cls, endpoint, params):
         try:
-            response = requests.get(f"{cls.BASE_URL}/{endpoint}", params=params, timeout=10)
+            response = requests.get(
+                f"{cls.BASE_URL}/{endpoint}", params=params, timeout=10
+            )
             response.raise_for_status()
             return response.json(), None
         except requests.exceptions.RequestException as e:
@@ -27,16 +29,16 @@ class WeatherService:
             "q": city,
             "units": "metric",
             "lang": "ru",
-            "appid": config.weather_api_key
+            "appid": config.weather_api_key,
         }
-        
+
         data, error = cls._make_api_request("weather", params)
         if error:
             return None, error
-            
-        if not isinstance(data, dict) or 'main' not in data:
+
+        if not isinstance(data, dict) or "main" not in data:
             return None, "Некорректный ответ от сервера"
-            
+
         return data, None
 
     @classmethod
@@ -46,16 +48,16 @@ class WeatherService:
             "units": "metric",
             "lang": "ru",
             "appid": config.weather_api_key,
-            "cnt": days * 8
+            "cnt": days * 8,
         }
-        
+
         data, error = cls._make_api_request("forecast", params)
         if error:
             return None, error
-            
-        if not isinstance(data, dict) or 'list' not in data:
+
+        if not isinstance(data, dict) or "list" not in data:
             return None, "Некорректный ответ от сервера"
-            
+
         return data, None
 
     @staticmethod
@@ -64,7 +66,9 @@ class WeatherService:
             if is_forecast:
                 return WeatherService._format_forecast_info(weather_data, info_type)
             else:
-                return WeatherService._format_current_weather_info(weather_data, info_type)
+                return WeatherService._format_current_weather_info(
+                    weather_data, info_type
+                )
         except (KeyError, IndexError, TypeError) as e:
             return f"Ошибка обработки данных: {e}"
 
@@ -92,51 +96,57 @@ class WeatherService:
 
     @staticmethod
     def _format_forecast_info(forecast_data, info_type):
-        forecasts = forecast_data['list']
-        
+        forecasts = forecast_data["list"]
+
         if info_type == "today":
-            today_forecasts = [f for f in forecasts if 
-                             datetime.fromtimestamp(f['dt']).date() == datetime.now().date()]
+            today_forecasts = [
+                f
+                for f in forecasts
+                if datetime.fromtimestamp(f["dt"]).date() == datetime.now().date()
+            ]
             if not today_forecasts:
                 return "Нет данных на сегодня"
-                
+
             result = "Прогноз на сегодня:\n"
             for forecast in today_forecasts:
-                time = datetime.fromtimestamp(forecast['dt']).strftime('%H:%M')
-                temp = int(round(forecast['main']['temp']))
-                desc = forecast['weather'][0]['description']
+                time = datetime.fromtimestamp(forecast["dt"]).strftime("%H:%M")
+                temp = int(round(forecast["main"]["temp"]))
+                desc = forecast["weather"][0]["description"]
                 result += f"{time}: {temp}°C, {desc}\n"
             return result
-            
+
         elif info_type == "tomorrow":
             tomorrow = datetime.now().date() + timedelta(days=1)
-            tomorrow_forecasts = [f for f in forecasts if 
-                                datetime.fromtimestamp(f['dt']).date() == tomorrow]
+            tomorrow_forecasts = [
+                f
+                for f in forecasts
+                if datetime.fromtimestamp(f["dt"]).date() == tomorrow
+            ]
             if not tomorrow_forecasts:
                 return "Нет данных на завтра"
-                
+
             result = "Прогноз на завтра:\n"
             for forecast in tomorrow_forecasts:
-                time = datetime.fromtimestamp(forecast['dt']).strftime('%H:%M')
-                temp = int(round(forecast['main']['temp']))
-                desc = forecast['weather'][0]['description']
+                time = datetime.fromtimestamp(forecast["dt"]).strftime("%H:%M")
+                temp = int(round(forecast["main"]["temp"]))
+                desc = forecast["weather"][0]["description"]
                 result += f"{time}: {temp}°C, {desc}\n"
             return result
-            
+
         elif info_type == "forecast_all":
             result = "Прогноз на 3 дня:\n"
             current_date = None
-            
+
             for forecast in forecasts[:10]:
-                forecast_date = datetime.fromtimestamp(forecast['dt']).strftime('%d.%m')
-                forecast_time = datetime.fromtimestamp(forecast['dt']).strftime('%H:%M')
-                
+                forecast_date = datetime.fromtimestamp(forecast["dt"]).strftime("%d.%m")
+                forecast_time = datetime.fromtimestamp(forecast["dt"]).strftime("%H:%M")
+
                 if forecast_date != current_date:
                     result += f"\n{forecast_date}:\n"
                     current_date = forecast_date
-                    
-                temp = int(round(forecast['main']['temp']))
-                desc = forecast['weather'][0]['description']
+
+                temp = int(round(forecast["main"]["temp"]))
+                desc = forecast["weather"][0]["description"]
                 result += f"  {forecast_time}: {temp}°C, {desc}\n"
-                
+
             return result
