@@ -1,14 +1,11 @@
 import logging
-from telegram.ext import Application, ContextTypes
+
 from telegram import Update
+from telegram.ext import Application, ContextTypes
 
 from config.settings import config
-from handlers import (
-    start_handler,
-    weather_input_handler,
-    weather_button_handler,
-    help_handler
-)
+from handlers import (help_handler, start_handler, weather_button_handler,
+                      weather_input_handler)
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",

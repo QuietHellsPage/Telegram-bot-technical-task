@@ -1,6 +1,9 @@
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import ContextTypes, MessageHandler, CallbackQueryHandler, filters
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.ext import (CallbackQueryHandler, ContextTypes, MessageHandler,
+                          filters)
+
 from services.weather_api import WeatherService
+
 
 async def handle_city_input(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:

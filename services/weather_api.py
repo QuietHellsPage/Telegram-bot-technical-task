@@ -1,6 +1,9 @@
-import requests
 from datetime import datetime, timedelta
+
+import requests
+
 from config.settings import config
+
 
 class WeatherService:
     BASE_URL = "https://api.openweathermap.org/data/2.5"
