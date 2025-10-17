@@ -12,7 +12,6 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 Введите название города на русском или английском языке с большой буквы.
 
-
 После ввода города вы сможете выбрать период времени и параметры погоды для просмотра.
         """
         await update.message.reply_text(welcome_text)

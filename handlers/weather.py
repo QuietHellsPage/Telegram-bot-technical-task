@@ -163,7 +163,7 @@ async def _handle_time_selection(query, context, callback_data, city):
             await query.edit_message_text(text, reply_markup=reply_markup)
 
         elif callback_data == "time_forecast":
-            await query.edit_message_text("Получаю прогноз на 5 дней...")
+            await query.edit_message_text("Получаю прогноз на 2 дня...")
             forecast_data, error = WeatherService.get_weather_forecast(city, days=5)
             if error:
                 await query.edit_message_text(f"Ошибка: {error}")
