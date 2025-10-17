@@ -45,7 +45,7 @@ async def handle_city_input(update: Update, context: ContextTypes.DEFAULT_TYPE):
             ],
             [
                 InlineKeyboardButton("📆 Завтра", callback_data="time_tomorrow"),
-                InlineKeyboardButton("🗓️ 2 дня", callback_data="time_forecast"),
+                InlineKeyboardButton("🗓️ 2 дня", callback_data="time_forecast_2days"),
             ],
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
@@ -78,7 +78,7 @@ async def handle_weather_button(
 
         if callback_data.startswith("time_"):
             await _handle_time_selection(query, context, callback_data, city)
-        elif callback_data in ["description", "temp", "clouds", "wind", "all"]:
+        elif callback_data in ["description", "temp", "clouds", "wind", "feels_like", "humidity", "pressure", "all"]:
             await _handle_weather_detail(query, context, callback_data)
         elif callback_data == "back_to_time":
             keyboard = [
@@ -88,7 +88,7 @@ async def handle_weather_button(
                 ],
                 [
                     InlineKeyboardButton("📆 Завтра", callback_data="time_tomorrow"),
-                    InlineKeyboardButton("🗓️ 2 дня", callback_data="time_forecast"),
+                    InlineKeyboardButton("🗓️ 2 дня", callback_data="time_forecast_2days"),
                 ],
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
@@ -115,22 +115,27 @@ async def _handle_time_selection(query, context, callback_data, city):
 
             keyboard = [
                 [
-                    InlineKeyboardButton("Описание", callback_data="description"),
-                    InlineKeyboardButton("Температура", callback_data="temp"),
+                    InlineKeyboardButton("🌡️ Температура", callback_data="temp"),
+                    InlineKeyboardButton("🌤️ Описание", callback_data="description"),
                 ],
                 [
-                    InlineKeyboardButton("Облачность", callback_data="clouds"),
-                    InlineKeyboardButton("Ветер", callback_data="wind"),
+                    InlineKeyboardButton("💨 Ветер", callback_data="wind"),
+                    InlineKeyboardButton("☁️ Облачность", callback_data="clouds"),
                 ],
-                [InlineKeyboardButton("Вся информация", callback_data="all")],
+                [
+                    InlineKeyboardButton("🤒 Ощущается", callback_data="feels_like"),
+                    InlineKeyboardButton("💧 Влажность", callback_data="humidity"),
+                ],
+                [
+                    InlineKeyboardButton("📊 Давление", callback_data="pressure"),
+                    InlineKeyboardButton("📋 Вся информация", callback_data="all"),
+                ],
                 [InlineKeyboardButton("◀️ Назад", callback_data="back_to_time")],
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)
 
-            temp = int(round(weather_data["main"]["temp"]))
-            desc = weather_data["weather"][0]["description"]
             await query.edit_message_text(
-                f"Погода в {city} сейчас:\n{temp}°C, {desc}\nВыберите параметр:",
+                f"Погода в {city.upper()} сейчас:\nВыберите параметр для просмотра:",
                 reply_markup=reply_markup,
             )
 
@@ -150,7 +155,7 @@ async def _handle_time_selection(query, context, callback_data, city):
 
         elif callback_data == "time_tomorrow":
             await query.edit_message_text("Получаю прогноз на завтра...")
-            forecast_data, error = WeatherService.get_weather_forecast(city, days=2)
+            forecast_data, error = WeatherService.get_weather_forecast(city, days=5)
             if error:
                 await query.edit_message_text(f"Ошибка: {error}")
                 return
@@ -162,7 +167,7 @@ async def _handle_time_selection(query, context, callback_data, city):
             reply_markup = InlineKeyboardMarkup(keyboard)
             await query.edit_message_text(text, reply_markup=reply_markup)
 
-        elif callback_data == "time_forecast":
+        elif callback_data == "time_forecast_2days":
             await query.edit_message_text("Получаю прогноз на 2 дня...")
             forecast_data, error = WeatherService.get_weather_forecast(city, days=5)
             if error:
@@ -170,7 +175,7 @@ async def _handle_time_selection(query, context, callback_data, city):
                 return
 
             text = WeatherService.format_weather_info(
-                forecast_data, "forecast_all", is_forecast=True
+                forecast_data, "forecast_2days", is_forecast=True
             )
             keyboard = [[InlineKeyboardButton("◀️ Назад", callback_data="back_to_time")]]
             reply_markup = InlineKeyboardMarkup(keyboard)
@@ -184,7 +189,7 @@ async def _handle_time_selection(query, context, callback_data, city):
                 ],
                 [
                     InlineKeyboardButton("📆 Завтра", callback_data="time_tomorrow"),
-                    InlineKeyboardButton("🗓️ 2 дня", callback_data="time_forecast"),
+                    InlineKeyboardButton("🗓️ 2 дня", callback_data="time_forecast_2days"),
                 ],
             ]
             reply_markup = InlineKeyboardMarkup(keyboard)

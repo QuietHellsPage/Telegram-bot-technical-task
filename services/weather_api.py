@@ -42,13 +42,12 @@ class WeatherService:
         return data, None
 
     @classmethod
-    def get_weather_forecast(cls, city, days=1):
+    def get_weather_forecast(cls, city, days=5):
         params = {
             "q": city,
             "units": "metric",
             "lang": "ru",
             "appid": config.weather_api_key,
-            "cnt": days * 8,
         }
 
         data, error = cls._make_api_request("forecast", params)
@@ -82,6 +81,12 @@ class WeatherService:
             return f"Облачность: {weather_data['clouds']['all']}%"
         elif info_type == "wind":
             return f"Ветер: {weather_data['wind']['speed']} м/с"
+        elif info_type == "feels_like":
+            return f"Ощущается как: {int(round(weather_data['main']['feels_like']))}°C"
+        elif info_type == "humidity":
+            return f"Влажность: {weather_data['main']['humidity']}%"
+        elif info_type == "pressure":
+            return f"Давление: {weather_data['main']['pressure']} гПа"
         elif info_type == "all":
             return (
                 f"Погода в выбранном городе:\n"
@@ -89,7 +94,7 @@ class WeatherService:
                 f"Температура: {int(round(weather_data['main']['temp']))}°C\n"
                 f"Ощущается как: {int(round(weather_data['main']['feels_like']))}°C\n"
                 f"Влажность: {weather_data['main']['humidity']}%\n"
-                f"Давление: {weather_data['main']['pressure']} Pa\n"
+                f"Давление: {weather_data['main']['pressure']} гПа\n"
                 f"Ветер: {weather_data['wind']['speed']} м/с\n"
                 f"Облачность: {weather_data['clouds']['all']}%"
             )
@@ -108,7 +113,7 @@ class WeatherService:
                 return "Нет данных на сегодня"
 
             result = "Прогноз на сегодня:\n"
-            for forecast in today_forecasts:
+            for forecast in today_forecasts[:8]:
                 time = datetime.fromtimestamp(forecast["dt"]).strftime("%H:%M")
                 temp = int(round(forecast["main"]["temp"]))
                 desc = forecast["weather"][0]["description"]
@@ -126,27 +131,42 @@ class WeatherService:
                 return "Нет данных на завтра"
 
             result = "Прогноз на завтра:\n"
-            for forecast in tomorrow_forecasts:
+            for forecast in tomorrow_forecasts[:8]:
                 time = datetime.fromtimestamp(forecast["dt"]).strftime("%H:%M")
                 temp = int(round(forecast["main"]["temp"]))
                 desc = forecast["weather"][0]["description"]
                 result += f"{time}: {temp}°C, {desc}\n"
             return result
 
-        elif info_type == "forecast_all":
-            result = "Прогноз на 2 дня:\n"
-            current_date = None
+        elif info_type == "forecast_2days":
+            start_date = datetime.now().date() + timedelta(days=1)
+            end_date = start_date + timedelta(days=2)
+            
+            future_forecasts = [
+                f for f in forecasts 
+                if start_date <= datetime.fromtimestamp(f["dt"]).date() < end_date
+            ]
+            
+            if not future_forecasts:
+                return "Нет данных на 2 дня вперед"
 
-            for forecast in forecasts[:10]:
-                forecast_date = datetime.fromtimestamp(forecast["dt"]).strftime("%d.%m")
-                forecast_time = datetime.fromtimestamp(forecast["dt"]).strftime("%H:%M")
+            result = "Прогноз на 2 дня вперед:\n"
 
-                if forecast_date != current_date:
-                    result += f"\n{forecast_date}:\n"
-                    current_date = forecast_date
+            daily_forecasts = {}
+            for forecast in future_forecasts:
+                date = datetime.fromtimestamp(forecast["dt"]).date()
+                if date not in daily_forecasts:
+                    daily_forecasts[date] = []
+                if len(daily_forecasts[date]) < 4:
+                    daily_forecasts[date].append(forecast)
 
-                temp = int(round(forecast["main"]["temp"]))
-                desc = forecast["weather"][0]["description"]
-                result += f"  {forecast_time}: {temp}°C, {desc}\n"
+            for date, day_forecasts in daily_forecasts.items():
+                date_str = date.strftime("%d.%m")
+                result += f"\n{date_str}:\n"
+                for forecast in day_forecasts:
+                    time = datetime.fromtimestamp(forecast["dt"]).strftime("%H:%M")
+                    temp = int(round(forecast["main"]["temp"]))
+                    desc = forecast["weather"][0]["description"]
+                    result += f"  {time}: {temp}°C, {desc}\n"
 
             return result
