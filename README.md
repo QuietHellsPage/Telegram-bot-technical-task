@@ -2,7 +2,7 @@
 Telegram Weather Bot предоставляет актуальные данные о погоде в различных городах мира с возможностью просмотра различных метеорологических параметров.
 
 ## Команда проекта
-- **Андрей Климов** ([@hollow_shelves_quiet_hell]((https://t.me/hollow_shelves_quiet_hell))) - разработчик
+- **Андрей Климов** ([@hollow_shelves_quiet_hell](https://t.me/hollow_shelves_quiet_hell)) - разработчик
   - написание кода
 - **Алина Трясоумова** ([@alinntr](https://t.me/alinntr)) - менеджер проекта
   - планирование и контроль работы
